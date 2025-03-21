@@ -1,49 +1,63 @@
 // app/dashboard/subscriptions/page.tsx
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { format } from 'date-fns';
+import { PlusCircle, Loader2 } from 'lucide-react';
+import { auth } from '@/auth';
+import prisma from '@/lib/db';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // Define the Subscription type
 interface Subscription {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    billingCycle: string;
-    nextBillingDate: string;
-    category: string;
-    status: "ACTIVE" | "CANCELED" | "PAUSED" | "TRIAL"; // Use literal union type
-    logo: string;
-  }
+  id: string;
+  name: string;
+  description: string | null;
+  price: number | any; // Change this to accept Decimal
+  currency: string;
+  billingCycle: string;
+  startDate: Date;
+  nextBillingDate: Date;
+  category: string | null;
+  logo: string | null;
+  website: string | null;
+  status: "ACTIVE" | "CANCELED" | "PAUSED" | "TRIAL";
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export default function SubscriptionsPage() {
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Subscriptions</h1>
+    <div className="container mx-auto py-6">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-bold">My Subscriptions</h1>
+          <p className="text-gray-500">
+            Manage all your subscriptions in one place
+          </p>
+        </div>
         <Button asChild>
-          <Link href="/dashboard/subscriptions/add">Add Subscription</Link>
+          <Link href="/dashboard/subscriptions/add">
+            <PlusCircle className="h-4 w-4 mr-2" />
+            Add Subscription
+          </Link>
         </Button>
       </div>
 
-      {/* Filters and sorting */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle>Filters</CardTitle>
-          <CardDescription>Filter and sort your subscriptions</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-2">
-            <Button variant="outline" size="sm">All</Button>
-            <Button variant="outline" size="sm">Active</Button>
-            <Button variant="outline" size="sm">Canceled</Button>
-            <Button variant="outline" size="sm">Trial</Button>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Tabs for different views */}
+      <Tabs defaultValue="all" className="mb-6">
+        <TabsList>
+          <TabsTrigger value="all">All</TabsTrigger>
+          <TabsTrigger value="active">Active</TabsTrigger>
+          <TabsTrigger value="canceled">Canceled</TabsTrigger>
+          <TabsTrigger value="paused">Paused</TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       {/* Subscriptions List */}
       <Suspense fallback={<SubscriptionsSkeleton />}>
@@ -53,76 +67,44 @@ export default function SubscriptionsPage() {
   );
 }
 
-function SubscriptionsList() {
-  // This would be fetched from your database in a real implementation
-  const subscriptions: Subscription[] = [
-    {
-      id: 1,
-      name: 'Netflix',
-      description: 'Standard Plan',
-      price: 15.99,
-      billingCycle: 'MONTHLY',
-      nextBillingDate: '2025-03-22',
-      category: 'Entertainment',
-      status: 'ACTIVE',
-      logo: 'N'
+async function SubscriptionsList() {
+  const session = await auth();
+  
+  if (!session || !session.user) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p>You must be signed in to view this page.</p>
+      </div>
+    );
+  }
+  
+  // Fetch user's subscriptions
+  const subscriptions = await prisma.subscription.findMany({
+    where: {
+      userId: session.user.id,
     },
-    {
-      id: 2,
-      name: 'Spotify',
-      description: 'Premium Individual',
-      price: 9.99,
-      billingCycle: 'MONTHLY',
-      nextBillingDate: '2025-03-25',
-      category: 'Entertainment',
-      status: 'ACTIVE' as 'ACTIVE',
-      logo: 'S'
+    orderBy: {
+      nextBillingDate: 'asc',
     },
-    {
-      id: 3,
-      name: 'Adobe Creative Cloud',
-      description: 'All Apps',
-      price: 52.99,
-      billingCycle: 'MONTHLY',
-      nextBillingDate: '2025-04-01',
-      category: 'Productivity',
-      status: 'ACTIVE',
-      logo: 'A'
-    },
-    {
-      id: 4,
-      name: 'New York Times',
-      description: 'Digital Subscription',
-      price: 4.99,
-      billingCycle: 'MONTHLY',
-      nextBillingDate: '2025-04-03',
-      category: 'News',
-      status: 'ACTIVE',
-      logo: 'NYT'
-    },
-    {
-      id: 5,
-      name: 'Notion Pro',
-      description: 'Pro Plan',
-      price: 8.00,
-      billingCycle: 'MONTHLY',
-      nextBillingDate: '2025-04-15',
-      category: 'Productivity',
-      status: 'ACTIVE',
-      logo: 'N'
-    },
-    {
-      id: 6,
-      name: 'Disney+',
-      description: 'Standard Plan',
-      price: 7.99,
-      billingCycle: 'MONTHLY',
-      nextBillingDate: '2025-04-10',
-      category: 'Entertainment',
-      status: 'ACTIVE',
-      logo: 'D+'
-    }
-  ];
+  });
+
+  // If no subscriptions found
+  if (subscriptions.length === 0) {
+    return (
+      <div className="text-center py-12 bg-white border border-gray-200 rounded-lg">
+        <h3 className="text-lg font-medium">No subscriptions yet</h3>
+        <p className="text-gray-500 mb-6">
+          Start tracking your subscriptions by adding your first one.
+        </p>
+        <Button asChild>
+          <Link href="/dashboard/subscriptions/add">
+            <PlusCircle className="h-4 w-4 mr-2" />
+            Add Subscription
+          </Link>
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -133,36 +115,43 @@ function SubscriptionsList() {
   );
 }
 
-interface Subscription {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  billingCycle: string;
-  nextBillingDate: string;
-  category: string;
-  status: 'ACTIVE' | 'CANCELED' | 'PAUSED' | 'TRIAL';
-  logo: string;
-}
-
 function SubscriptionCard({ subscription }: { subscription: Subscription }) {
-  const statusColors = {
+  const statusColors: Record<string, string> = {
     ACTIVE: 'bg-green-100 text-green-800',
     CANCELED: 'bg-red-100 text-red-800',
     PAUSED: 'bg-yellow-100 text-yellow-800',
     TRIAL: 'bg-blue-100 text-blue-800'
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+  const formatCurrency = (amount: number, currency: string = "MYR") => {
+    return new Intl.NumberFormat("en-MY", {
+      style: "currency",
+      currency: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
   };
 
-  const formatBillingCycle = (cycle: string) => {
-    return cycle.charAt(0) + cycle.slice(1).toLowerCase();
+  const getBillingCycleText = (cycle: string) => {
+    switch (cycle) {
+      case "MONTHLY":
+        return "Monthly";
+      case "QUARTERLY":
+        return "Every 3 months";
+      case "BIANNUAL":
+        return "Every 6 months";
+      case "ANNUAL":
+        return "Yearly";
+      case "CUSTOM":
+        return "Custom";
+      default:
+        return cycle;
+    }
+  };
+
+  // Get first letter of name for avatar
+  const getInitial = (name: string) => {
+    return name.charAt(0).toUpperCase();
   };
 
   return (
@@ -171,16 +160,16 @@ function SubscriptionCard({ subscription }: { subscription: Subscription }) {
         <div className="flex justify-between items-start">
           <div className="flex items-center gap-2">
             <Avatar>
-              <div className="flex h-full w-full items-center justify-center bg-muted">
-                {subscription.logo}
+              <div className="flex h-full w-full items-center justify-center bg-indigo-100 text-indigo-600 font-medium">
+                {subscription.logo || getInitial(subscription.name)}
               </div>
             </Avatar>
             <div>
               <CardTitle className="text-lg">{subscription.name}</CardTitle>
-              <CardDescription>{subscription.description}</CardDescription>
+              <CardDescription>{subscription.category || "Uncategorized"}</CardDescription>
             </div>
           </div>
-          <Badge className={statusColors[subscription.status]}>
+          <Badge className={statusColors[subscription.status] || "bg-gray-100 text-gray-800"}>
             {subscription.status.charAt(0) + subscription.status.slice(1).toLowerCase()}
           </Badge>
         </div>
@@ -188,16 +177,24 @@ function SubscriptionCard({ subscription }: { subscription: Subscription }) {
       <CardContent>
         <div className="grid grid-cols-2 gap-2 text-sm">
           <div className="text-muted-foreground">Price:</div>
-          <div className="font-medium">${subscription.price.toFixed(2)}/{subscription.billingCycle.toLowerCase() === 'monthly' ? 'mo' : 'yr'}</div>
+          <div className="font-medium">
+            {formatCurrency(Number(subscription.price), subscription.currency)}
+          </div>
           
           <div className="text-muted-foreground">Billing:</div>
-          <div className="font-medium">{formatBillingCycle(subscription.billingCycle)}</div>
+          <div className="font-medium">{getBillingCycleText(subscription.billingCycle)}</div>
           
           <div className="text-muted-foreground">Next Payment:</div>
-          <div className="font-medium">{formatDate(subscription.nextBillingDate)}</div>
+          <div className="font-medium">
+            {format(new Date(subscription.nextBillingDate), "MMM d, yyyy")}
+          </div>
           
-          <div className="text-muted-foreground">Category:</div>
-          <div className="font-medium">{subscription.category}</div>
+          {subscription.description && (
+            <>
+              <div className="text-muted-foreground">Description:</div>
+              <div className="font-medium line-clamp-1">{subscription.description}</div>
+            </>
+          )}
         </div>
         
         <div className="mt-4 flex gap-2">

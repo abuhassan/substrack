@@ -35,40 +35,40 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="flex justify-between items-center p-3 bg-white rounded border border-gray-200">
                   <div>
-                    <p className="font-medium">Netflix</p>
+                    <p className="font-medium">Astro GO</p>
                     <p className="text-sm text-gray-500">Next payment: 3/19/2025</p>
                   </div>
-                  <p className="font-semibold">$9.99/mo</p>
+                  <p className="font-semibold">RM39.90/mo</p>
                 </div>
                 
                 <div className="flex justify-between items-center p-3 bg-white rounded border border-gray-200">
                   <div>
-                    <p className="font-medium">Spotify</p>
+                    <p className="font-medium">Spotify Malaysia</p>
                     <p className="text-sm text-gray-500">Next payment: 3/24/2025</p>
                   </div>
-                  <p className="font-semibold">$19.98/mo</p>
+                  <p className="font-semibold">RM14.90/mo</p>
                 </div>
                 
                 <div className="flex justify-between items-center p-3 bg-white rounded border border-gray-200">
                   <div>
-                    <p className="font-medium">Adobe Creative Cloud</p>
+                    <p className="font-medium">GrabUnlimited</p>
                     <p className="text-sm text-gray-500">Next payment: 3/29/2025</p>
                   </div>
-                  <p className="font-semibold">$29.97/mo</p>
+                  <p className="font-semibold">RM25.00/mo</p>
                 </div>
                 
                 <div className="flex justify-between items-center p-3 bg-white rounded border border-gray-200">
                   <div>
-                    <p className="font-medium">Notion Pro</p>
-                    <p className="text-sm text-gray-500">Next payment: 4/3/2025</p>
+                    <p className="font-medium">Disney+ Hotstar</p>
+                    <p className="text-sm text-gray-500">Next payment: 4/10/2025</p>
                   </div>
-                  <p className="font-semibold">$39.96/mo</p>
+                  <p className="font-semibold">RM54.90/quarter</p>
                 </div>
               </div>
               
               <div className="flex justify-between items-center mt-6 pt-4 border-t border-indigo-100">
                 <p className="font-semibold">Monthly Total</p>
-                <p className="font-bold text-xl">$64.96</p>
+                <p className="font-bold text-xl">RM98.13</p>
               </div>
             </div>
           </div>

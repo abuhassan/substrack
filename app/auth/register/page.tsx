@@ -6,8 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle, Eye, EyeOff, Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 
@@ -18,6 +17,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,88 +64,113 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="container flex h-screen w-screen flex-col items-center justify-center">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
-          <CardDescription>
-            Enter your information to get started
-          </CardDescription>
-        </CardHeader>
-        
-        <CardContent className="space-y-4">
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 p-3 rounded-md flex items-start">
-              <AlertCircle className="h-5 w-5 mr-2 flex-shrink-0 mt-0.5" />
-              <p>{error}</p>
-            </div>
-          )}
+    <>
+      <div className="text-center mb-6">
+        <p className="text-xl text-gray-700">Create an account to get started</p>
+      </div>
           
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
-              <Input
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="John Doe"
-                required
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@example.com"
-                required
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={8}
-              />
-              <p className="text-xs text-gray-500">Password must be at least 8 characters long</p>
-            </div>
-            
-            <Button 
-              type="submit" 
-              className="w-full" 
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating account
-                </>
-              ) : (
-                "Register"
-              )}
-            </Button>
-          </form>
-        </CardContent>
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 p-3 rounded-md flex items-start mb-6">
+          <AlertCircle className="h-5 w-5 mr-2 flex-shrink-0 mt-0.5" />
+          <p>{error}</p>
+        </div>
+      )}
+      
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="space-y-2">
+          <Label htmlFor="name" className="text-base">Full Name</Label>
+          <Input
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="John Doe"
+            required
+            className="h-11"
+          />
+        </div>
         
-        <CardFooter className="flex flex-wrap items-center justify-between">
-          <div className="text-sm text-center w-full">
-            Already have an account?{" "}
-            <Link 
-              href="/auth/login" 
-              className="text-indigo-600 hover:text-indigo-500 font-medium"
+        <div className="space-y-2">
+          <Label htmlFor="email" className="text-base">Email</Label>
+          <Input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="name@example.com"
+            required
+            className="h-11"
+          />
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="password" className="text-base">Password</Label>
+          <div className="relative">
+            <Input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={8}
+              className="h-11 pr-10"
+            />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="absolute right-0 top-0 h-full px-3"
+              onClick={() => setShowPassword(!showPassword)}
             >
-              Sign in
-            </Link>
+              {showPassword ? (
+                <EyeOff className="h-4 w-4 text-gray-500" />
+              ) : (
+                <Eye className="h-4 w-4 text-gray-500" />
+              )}
+              <span className="sr-only">
+                {showPassword ? "Hide password" : "Show password"}
+              </span>
+            </Button>
           </div>
-        </CardFooter>
-      </Card>
-    </div>
+          <p className="text-xs text-gray-500">Password must be at least 8 characters long</p>
+        </div>
+        
+        <Button 
+          type="submit" 
+          className="w-full h-11 mt-2" 
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating account
+            </>
+          ) : (
+            "Register"
+          )}
+        </Button>
+      </form>
+      
+      <div className="mt-6 pt-5 border-t border-gray-200 text-center">
+        <p className="text-sm">
+          Already have an account?{" "}
+          <Link 
+            href="/auth/login" 
+            className="text-indigo-600 hover:text-indigo-500 font-medium"
+          >
+            Sign in
+          </Link>
+        </p>
+        
+        <p className="text-xs text-gray-500 mt-4">
+          By creating an account, you agree to our{" "}
+          <Link href="/terms" className="underline hover:text-gray-800">
+            Terms of Service
+          </Link>{" "}
+          and{" "}
+          <Link href="/privacy" className="underline hover:text-gray-800">
+            Privacy Policy
+          </Link>
+        </p>
+      </div>
+    </>
   );
 }
