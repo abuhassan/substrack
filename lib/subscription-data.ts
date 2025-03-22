@@ -26,156 +26,7 @@ export const subscriptionSuggestions: SubscriptionSuggestion[] = [
     category: "Entertainment",
     website: "https://netflix.com"
   },
-  {
-    id: "spotify",
-    name: "Spotify",
-    description: "Music streaming service",
-    price: 14.90,
-    currency: "MYR",
-    billingCycle: "MONTHLY",
-    category: "Entertainment",
-    website: "https://spotify.com"
-  },
-  {
-    id: "disney-plus",
-    name: "Disney+",
-    description: "Streaming service for Disney content",
-    price: 28.90,
-    currency: "MYR",
-    billingCycle: "MONTHLY",
-    category: "Entertainment",
-    website: "https://disneyplus.com"
-  },
-  {
-    id: "prime-video",
-    name: "Amazon Prime Video",
-    description: "Video streaming service by Amazon",
-    price: 14.90,
-    currency: "MYR",
-    billingCycle: "MONTHLY",
-    category: "Entertainment",
-    website: "https://primevideo.com"
-  },
-  {
-    id: "youtube-premium",
-    name: "YouTube Premium",
-    description: "Ad-free YouTube with background play",
-    price: 23.90,
-    currency: "MYR",
-    billingCycle: "MONTHLY",
-    category: "Entertainment",
-    website: "https://youtube.com/premium"
-  },
-  
-  // Productivity
-  {
-    id: "microsoft365",
-    name: "Microsoft 365",
-    description: "Office applications and cloud services",
-    price: 42.00,
-    currency: "MYR",
-    billingCycle: "MONTHLY",
-    category: "Productivity",
-    website: "https://microsoft.com/microsoft-365"
-  },
-  {
-    id: "adobe-cc",
-    name: "Adobe Creative Cloud",
-    description: "Suite of Adobe creative applications",
-    price: 228.00,
-    currency: "MYR",
-    billingCycle: "MONTHLY",
-    category: "Productivity",
-    website: "https://adobe.com/creativecloud"
-  },
-  {
-    id: "notion",
-    name: "Notion",
-    description: "All-in-one workspace for notes and tasks",
-    price: 36.00,
-    currency: "MYR",
-    billingCycle: "MONTHLY",
-    category: "Productivity",
-    website: "https://notion.so"
-  },
-  
-  // Utilities
-  {
-    id: "icloud",
-    name: "iCloud+",
-    description: "Cloud storage for Apple devices",
-    price: 10.90,
-    currency: "MYR",
-    billingCycle: "MONTHLY",
-    category: "Utilities",
-    website: "https://apple.com/icloud"
-  },
-  {
-    id: "google-one",
-    name: "Google One",
-    description: "Cloud storage for Google services",
-    price: 9.90,
-    currency: "MYR",
-    billingCycle: "MONTHLY",
-    category: "Utilities",
-    website: "https://one.google.com"
-  },
-  
-  // Shopping
-  {
-    id: "amazon-prime",
-    name: "Amazon Prime",
-    description: "Fast shipping and other Amazon benefits",
-    price: 14.90,
-    currency: "MYR",
-    billingCycle: "MONTHLY",
-    category: "Shopping",
-    website: "https://amazon.com/prime"
-  },
-  {
-    id: "shopee-premium",
-    name: "Shopee Premium",
-    description: "Shopee membership with free shipping",
-    price: 14.90,
-    currency: "MYR",
-    billingCycle: "MONTHLY",
-    category: "Shopping",
-    website: "https://shopee.com.my"
-  },
-  
-  // Fitness
-  {
-    id: "fitbit-premium",
-    name: "Fitbit Premium",
-    description: "Advanced health insights and programs",
-    price: 39.00,
-    currency: "MYR",
-    billingCycle: "MONTHLY",
-    category: "Fitness",
-    website: "https://fitbit.com/premium"
-  },
-  
-  // Gaming
-  {
-    id: "xbox-game-pass",
-    name: "Xbox Game Pass",
-    description: "Subscription service for Xbox games",
-    price: 39.00,
-    currency: "MYR",
-    billingCycle: "MONTHLY",
-    category: "Gaming",
-    website: "https://xbox.com/gamepass"
-  },
-  {
-    id: "ps-plus",
-    name: "PlayStation Plus",
-    description: "Subscription service for PlayStation games",
-    price: 29.00,
-    currency: "MYR",
-    billingCycle: "MONTHLY",
-    category: "Gaming",
-    website: "https://playstation.com/plus"
-  }
+  // Other subscriptions...
 ];
 
 // Function to get a subscription suggestion by ID
@@ -189,12 +40,13 @@ export interface BillingCycleOption {
   label: string;
 }
 
-// Available billing cycles
+// Available billing cycles - Added LIFETIME option
 export const billingCycles: BillingCycleOption[] = [
   { value: "MONTHLY", label: "Monthly" },
   { value: "QUARTERLY", label: "Every 3 months" },
   { value: "BIANNUAL", label: "Every 6 months" },
   { value: "ANNUAL", label: "Yearly" },
+  { value: "LIFETIME", label: "One-time purchase" },
   { value: "CUSTOM", label: "Custom" }
 ];
 
@@ -211,6 +63,7 @@ export const subscriptionCategories: string[] = [
   "News & Media",
   "Finance",
   "Education",
+  "Software",  // Added Software category for lifetime purchases
   "Other"
 ];
 

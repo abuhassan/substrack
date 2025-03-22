@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 850">
+  <!-- Background -->
+  <rect width="1000" height="850" fill="#1e1e1e"/>
+  
+  <!-- File tree -->
+  <g font-family="Menlo, Monaco, 'Courier New', monospace" font-size="14">
+    <!-- ROOT Level -->
+    <text x="25" y="30" fill="#cccccc" font-weight="bold">Project Root</text>
+    
+    <!-- APP Directory -->
+    <text x="40" y="60" fill="#4ec9b0">app/</text>
+    
+    <!-- API Routes -->
+    <text x="60" y="90" fill="#4ec9b0">api/</text>
+    <text x="80" y="120" fill="#4ec9b0">auth/[...nextauth]/</text>
+    <text x="100" y="150" fill="#569cd6">route.ts</text>
+    <text x="80" y="180" fill="#4ec9b0">register/</text>
+    <text x="100" y="210" fill="#569cd6">route.ts</text>
+    <text x="80" y="240" fill="#4ec9b0">subscriptions/</text>
+    <text x="100" y="270" fill="#569cd6">route.ts</text>
+    <text x="100" y="300" fill="#4ec9b0">[id]/</text>
+    <text x="120" y="330" fill="#569cd6">route.ts</text>
+    
+    <!-- AUTH Routes -->
+    <text x="60" y="360" fill="#4ec9b0">auth/</text>
+    <text x="80" y="390" fill="#4ec9b0">login/</text>
+    <text x="100" y="420" fill="#9cdcfe">page.tsx</text>
+    <text x="80" y="450" fill="#4ec9b0">register/</text>
+    <text x="100" y="480" fill="#9cdcfe">page.tsx</text>
+    <text x="80" y="510" fill="#9cdcfe">layout.tsx</text>
+    
+    <!-- DASHBOARD Routes -->
+    <text x="60" y="540" fill="#4ec9b0">dashboard/</text>
+    <text x="80" y="570" fill="#9cdcfe">page.tsx</text>
+    <text x="80" y="600" fill="#9cdcfe">layout.tsx</text>
+    <text x="80" y="630" fill="#4ec9b0">payments/</text>
+    <text x="100" y="660" fill="#9cdcfe">page.tsx</text>
+    <text x="80" y="690" fill="#4ec9b0">settings/</text>
+    <text x="100" y="720" fill="#9cdcfe">page.tsx</text>
+    <text x="80" y="750" fill="#4ec9b0">subscriptions/</text>
+    <text x="100" y="780" fill="#9cdcfe">page.tsx</text>
+    <text x="100" y="810" fill="#4ec9b0">[id]/</text>
+    <text x="120" y="840" fill="#9cdcfe">page.tsx</text>
+    <text x="120" y="870" fill="#4ec9b0">edit/</text>
+    <text x="140" y="900" fill="#9cdcfe">page.tsx</text>
+    <text x="100" y="930" fill="#4ec9b0">add/</text>
+    <text x="120" y="960" fill="#9cdcfe">page.tsx</text>
+    
+    <!-- Root level files -->
+    <text x="60" y="990" fill="#9cdcfe">globals.css</text>
+    <text x="60" y="1020" fill="#9cdcfe">layout.tsx</text>
+    <text x="60" y="1050" fill="#9cdcfe">page.tsx</text>
+    <text x="60" y="1080" fill="#dcdcaa">favicon.ico</text>
+    
+    <!-- COMPONENTS Directory -->
+    <text x="380" y="60" fill="#4ec9b0">components/</text>
+    
+    <!-- Dashboard components -->
+    <text x="400" y="90" fill="#4ec9b0">dashboard/</text>
+    <text x="420" y="120" fill="#9cdcfe">DashboardMetrics.tsx</text>
+    <text x="420" y="150" fill="#9cdcfe">SubscriptionAddForm.tsx</text>
+    <text x="420" y="180" fill="#9cdcfe">SubscriptionCard.tsx</text>
+    <text x="420" y="210" fill="#9cdcfe">SubscriptionSuggestions.tsx</text>
+    <text x="420" y="240" fill="#9cdcfe">UpcomingPayments.tsx</text>
+    
+    <!-- UI components -->
+    <text x="400" y="270" fill="#4ec9b0">ui/</text>
+    <text x="420" y="300" fill="#9cdcfe">avatar.tsx</text>
+    <text x="420" y="330" fill="#9cdcfe">button.tsx</text>
+    <text x="420" y="360" fill="#9cdcfe">card.tsx</text>
+    <text x="420" y="390" fill="#9cdcfe">input.tsx</text>
+    <text x="420" y="420" fill="#9cdcfe">select.tsx</text>
+    <text x="420" y="450" fill="#9cdcfe">tabs.tsx</text>
+    <text x="420" y="480" fill="#9cdcfe">...</text>
+    
+    <!-- Core components -->
+    <text x="400" y="510" fill="#9cdcfe">Footer.tsx</text>
+    <text x="400" y="540" fill="#9cdcfe">Navbar.tsx</text>
+    <text x="400" y="570" fill="#9cdcfe">SessionProvider.tsx</text>
+    <text x="400" y="600" fill="#9cdcfe">ToastProvider.tsx</text>
+    
+    <!-- LIB Directory -->
+    <text x="380" y="630" fill="#4ec9b0">lib/</text>
+    <text x="400" y="660" fill="#4ec9b0">actions/</text>
+    <text x="420" y="690" fill="#569cd6">user-actions.ts</text>
+    <text x="420" y="720" fill="#569cd6">subscription-actions.ts</text>
+    <text x="400" y="750" fill="#569cd6">db.ts</text>
+    <text x="400" y="780" fill="#569cd6">subscription-data.ts</text>
+    <text x="400" y="810" fill="#569cd6">utils.ts</text>
+    
+    <!-- Other Directories -->
+    <text x="380" y="840" fill="#4ec9b0">prisma/</text>
+    <text x="400" y="870" fill="#569cd6">schema.prisma</text>
+    <text x="380" y="900" fill="#4ec9b0">public/</text>
+    <text x="400" y="930" fill="#4ec9b0">logos/</text>
+    <text x="380" y="960" fill="#4ec9b0">types/</text>
+    <text x="400" y="990" fill="#569cd6">index.ts</text>
+    
+    <!-- Root Files -->
+    <text x="380" y="1020" fill="#569cd6">auth.ts</text>
+    <text x="380" y="1050" fill="#dcdcaa">components.json</text>
+    <text x="380" y="1080" fill="#dcdcaa">docker-compose.yml</text>
+    <text x="380" y="1110" fill="#dcdcaa">next.config.js</text>
+    <text x="380" y="1140" fill="#dcdcaa">package.json</text>
+    <text x="380" y="1170" fill="#dcdcaa">tsconfig.json</text>
+    <text x="380" y="1200" fill="#868686">.env.local</text>
+    <text x="380" y="1230" fill="#868686">.gitignore</text>
+    
+    <!-- Legend at the bottom -->
+    <rect x="700" y="60" width="280" height="260" rx="5" ry="5" fill="#2d2d2d" stroke="#565656"/>
+    <text x="720" y="90" fill="#ffffff" font-weight="bold">File Type Legend</text>
+    <rect x="720" y="110" width="15" height="15" fill="#4ec9b0"/>
+    <text x="745" y="123" fill="#ffffff">Directories</text>
+    <rect x="720" y="140" width="15" height="15" fill="#9cdcfe"/>
+    <text x="745" y="153" fill="#ffffff">React/TSX Components</text>
+    <rect x="720" y="170" width="15" height="15" fill="#569cd6"/>
+    <text x="745" y="183" fill="#ffffff">TypeScript/API Files</text>
+    <rect x="720" y="200" width="15" height="15" fill="#dcdcaa"/>
+    <text x="745" y="213" fill="#ffffff">Configuration Files</text>
+    <rect x="720" y="230" width="15" height="15" fill="#868686"/>
+    <text x="745" y="243" fill="#ffffff">Hidden Files</text>
+    
+    <!-- Architecture notes -->
+    <rect x="700" y="340" width="280" height="250" rx="5" ry="5" fill="#2d2d2d" stroke="#565656"/>
+    <text x="720" y="370" fill="#ffffff" font-weight="bold">Project Architecture</text>
+    <text x="720" y="400" fill="#ffffff">• Next.js 15 with App Router</text>
+    <text x="720" y="430" fill="#ffffff">• NextAuth v5 for authentication</text>
+    <text x="720" y="460" fill="#ffffff">• PostgreSQL with Prisma ORM</text>
+    <text x="720" y="490" fill="#ffffff">• Tailwind CSS + shadcn/ui</text>
+    <text x="720" y="520" fill="#ffffff">• Server Components + Client Islands</text>
+    <text x="720" y="550" fill="#ffffff">• Docker for development</text>
+    
+    <!-- Key features -->
+    <rect x="700" y="610" width="280" height="210" rx="5" ry="5" fill="#2d2d2d" stroke="#565656"/>
+    <text x="720" y="640" fill="#ffffff" font-weight="bold">Key Features</text>
+    <text x="720" y="670" fill="#ffffff">• Subscription Management</text>
+    <text x="720" y="700" fill="#ffffff">• Payment Tracking</text>
+    <text x="720" y="730" fill="#ffffff">• Dashboard with Analytics</text>
+    <text x="720" y="760" fill="#ffffff">• Popular Service Suggestions</text>
+    <text x="720" y="790" fill="#ffffff">• User Authentication</text>
+  </g>
+</svg>

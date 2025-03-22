@@ -34,6 +34,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 import { 
   BillingCycleOption,
@@ -44,6 +45,7 @@ import {
   subscriptionStatuses,
   getSubscriptionSuggestionById
 } from "@/lib/subscription-data";
+import { calculateNextBillingDate } from "@/lib/utils";
 
 // Form schema validation
 const formSchema = z.object({
@@ -56,7 +58,7 @@ const formSchema = z.object({
   currency: z.string().default("MYR"),
   billingCycle: z.string().min(1, "Billing cycle is required"),
   startDate: z.date(),
-  nextBillingDate: z.date(),
+  nextBillingDate: z.date().optional().nullable(), // Updated to make optional
   category: z.string().optional(),
   logo: z.string().optional(),
   website: z.string().url().optional().or(z.literal("")),
@@ -70,6 +72,7 @@ export default function SubscriptionAddForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLifetime, setIsLifetime] = useState(false);
   
   // Initialize form with default values
   const form = useForm<FormValues>({
@@ -89,6 +92,34 @@ export default function SubscriptionAddForm() {
     },
   });
   
+  // Watch for billing cycle changes to handle lifetime purchases
+  const billingCycle = form.watch("billingCycle");
+  const startDate = form.watch("startDate");
+  
+  // Update isLifetime state when billing cycle changes
+  useEffect(() => {
+    const isLifetimePurchase = billingCycle === "LIFETIME";
+    setIsLifetime(isLifetimePurchase);
+    
+    // When switching to LIFETIME, clear the next billing date
+    if (isLifetimePurchase) {
+      form.setValue("nextBillingDate", null);
+    } 
+    // When switching from LIFETIME to a recurring cycle, recalculate next billing date
+    else if (form.getValues("nextBillingDate") === null) {
+      const calculatedDate = calculateNextBillingDate(startDate, billingCycle);
+      form.setValue("nextBillingDate", calculatedDate);
+    }
+  }, [billingCycle, form, startDate]);
+  
+  // Update next billing date when start date changes (except for lifetime)
+  useEffect(() => {
+    if (billingCycle !== "LIFETIME") {
+      const calculatedDate = calculateNextBillingDate(startDate, billingCycle);
+      form.setValue("nextBillingDate", calculatedDate);
+    }
+  }, [startDate, billingCycle, form]);
+  
   // Check for preset parameter in URL
   useEffect(() => {
     const preset = searchParams.get("preset");
@@ -103,12 +134,16 @@ export default function SubscriptionAddForm() {
           currency: suggestion.currency,
           billingCycle: suggestion.billingCycle,
           startDate: new Date(),
-          nextBillingDate: new Date(),
+          nextBillingDate: suggestion.billingCycle === "LIFETIME" ? null : 
+                          calculateNextBillingDate(new Date(), suggestion.billingCycle),
           category: suggestion.category,
           logo: suggestion.logo || "",
           website: suggestion.website || "",
           status: "ACTIVE",
         });
+        
+        // Update lifetime state
+        setIsLifetime(suggestion.billingCycle === "LIFETIME");
         
         toast.success(`${suggestion.name} details loaded`);
       }
@@ -311,7 +346,9 @@ export default function SubscriptionAddForm() {
             name="startDate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Start Date</FormLabel>
+                <FormLabel>
+                  {isLifetime ? "Purchase Date" : "Start Date"}
+                </FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -342,42 +379,53 @@ export default function SubscriptionAddForm() {
             )}
           />
           
-          {/* Next Billing Date */}
-          <FormField
-            control={form.control}
-            name="nextBillingDate"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Next Billing Date</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className="w-full pl-3 text-left font-normal"
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP")
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {/* Next Billing Date - Only show for non-lifetime subscriptions */}
+          {!isLifetime && (
+            <FormField
+              control={form.control}
+              name="nextBillingDate"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Next Billing Date</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className="w-full pl-3 text-left font-normal"
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value || undefined}
+                        onSelect={field.onChange}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+          
+          {/* Show info alert for lifetime subscriptions */}
+          {isLifetime && (
+            <Alert className="md:col-span-2">
+              <AlertDescription>
+                This is a one-time purchase. No recurring billing will be tracked.
+              </AlertDescription>
+            </Alert>
+          )}
           
           {/* Website */}
           <FormField
